@@ -17,7 +17,7 @@ def index():
 def get_events():
     # internal api for ui polling (15s interval)
     # sort descending to show latest events first
-    cursor = collection.find({}, {'_id': 0}).sort("timestamp", -1) 
+    cursor = collection.find({}, {'_id': 0}).sort("timestamp", -1).limit(20)
     events = list(cursor)
     
     return jsonify(events)
