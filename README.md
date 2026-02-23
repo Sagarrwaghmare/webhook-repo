@@ -1,11 +1,4 @@
-Here are two separate, professionally formatted `README.md` files based on your specific implementation details.
 
-You can copy and paste these directly into your respective repositories.
-
-### 1. File for `webhook-repo`
-**Filename:** `README.md`
-
-```markdown
 # GitHub Webhook Receiver & UI Dashboard
 
 This is the main application repository for the Developer Assessment Task. It consists of a Flask backend that receives GitHub webhooks (Push, Pull Request, Merge), stores them in MongoDB, and a frontend UI that polls for changes in real-time.
@@ -87,4 +80,3 @@ Open your browser and navigate to `http://localhost:5000`.
 
 ## 🧪 Testing
 To test this, you must configure a webhook on a separate GitHub repository (see the `action-repo` README for details).
-```
