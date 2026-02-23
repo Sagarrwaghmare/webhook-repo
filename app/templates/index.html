@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Git MongoDB Dashboard</title>
+    <style>
+        body { font-family: sans-serif; background: #f4f4f9; padding: 20px; }
+        .container { max-width: 1000px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h2 { text-align: center; color: #333; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: #007bff; color: white; }
+        .badge { padding: 5px 10px; border-radius: 4px; color: white; font-weight: bold; font-size: 0.8em; }
+        .PUSH { background-color: #17a2b8; }
+        .PULL_REQUEST { background-color: #ffc107; color: black; }
+        .MERGE { background-color: #28a745; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>🚀 Git Event Log</h2>
+    <div style="text-align: right; color: #666; font-size: 0.9em;">Auto-updating every 15s</div>
+    
+    <table id="eventTable">
+        <thead>
+            <tr>
+                <th>Action</th>
+                <th>Author</th>
+                <th>From</th>
+                <th>To</th>
+                <th>ID</th>
+                <th>Time (UTC)</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<script>
+    async function fetchData() {
+        try {
+            // We call the internal API route we are about to create
+            const response = await fetch('/api/events');
+            const data = await response.json();
+            const tableBody = document.querySelector('#eventTable tbody');
+            tableBody.innerHTML = ''; 
+
+            data.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><span class="badge ${row.action}">${row.action}</span></td>
+                    <td>${row.author}</td>
+                    <td><code>${row.from_branch}</code></td>
+                    <td><code>${row.to_branch}</code></td>
+                    <td style="font-family: monospace;">${row.request_id ? row.request_id.substring(0, 7) : 'N/A'}</td>
+                    <td>${row.timestamp}</td>
+                `;
+                tableBody.appendChild(tr);
+            });
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
+
+    fetchData(); // Run on load
+    setInterval(fetchData, 15000); // Run every 15s
+</script>
+
+</body>
+</html>
