@@ -19,6 +19,6 @@ def index():
 def get_events():
     # Fetch last 20 events, sorted by newest first
     # We exclude '_id' because it is not JSON serializable by default
-    cursor = collection.find({}, {'_id': 0}).sort("timestamp", -1).limit(20)
+    cursor = collection.find({}, {'_id': 0}).sort("timestamp", -1)
     events = list(cursor)
     return jsonify(events)
