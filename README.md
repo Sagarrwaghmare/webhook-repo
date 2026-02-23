@@ -1,126 +1,90 @@
+Here are two separate, professionally formatted `README.md` files based on your specific implementation details.
 
----
+You can copy and paste these directly into your respective repositories.
 
-# Git Event Webhook Dashboard
+### 1. File for `webhook-repo`
+**Filename:** `README.md`
 
-This project is a Flask-based web application that listens to GitHub webhook events for **Pushes**, **Pull Requests**, and **Merges**. It saves these events to a MongoDB database and displays them on a live-updating dashboard.
+```markdown
+# GitHub Webhook Receiver & UI Dashboard
 
-## Features
+This is the main application repository for the Developer Assessment Task. It consists of a Flask backend that receives GitHub webhooks (Push, Pull Request, Merge), stores them in MongoDB, and a frontend UI that polls for changes in real-time.
 
--   Receives and processes webhook data from GitHub.
--   Saves structured event data to a MongoDB collection with schema validation.
--   Provides a clean, real-time dashboard that polls for new events every 15 seconds.
--   Organized into a scalable Flask application structure using Blueprints.
+## 📋 Project Overview
 
-***
+*   **Backend:** Python (Flask)
+*   **Database:** MongoDB
+*   **Frontend:** HTML/JS (Polls API every 15 seconds)
+*   **Purpose:** To capture and display Git events from a connected repository.
 
-## 1. Prerequisites
+## ⚙️ Prerequisites
 
-Before you begin, ensure you have the following installed on your system:
+Before running the application, ensure you have the following installed:
+1.  **Python 3.x**
+2.  **MongoDB** (Ensure the service is running locally on port `27017`)
+3.  **Ngrok** (To expose your localhost to GitHub)
 
-*   **Python 3.x**
-*   **Pip** and **Virtualenv**
-*   **MongoDB Community Server**: Download and install from the [official website](https://www.mongodb.com/try/download/community). Ensure the MongoDB service is running in the background.
-*   **Ngrok**: Download from the [official website](https://ngrok.com/download) to expose your local server to the internet.
+## 🚀 Installation & Setup
 
-***
+### 1. Clone the Repository
+```bash
+git clone <YOUR_WEBHOOK_REPO_LINK>
+cd webhook-repo
+```
 
-## 2. Local Setup
+### 2. Set Up Virtual Environment
+It is recommended to use a virtual environment to manage dependencies.
 
-*   ### Clone the Repository
-    ```bash
-    git clone <your-repository-url>
-    cd <repository-folder>
-    ```
+**Windows:**
+```bash
+python -m venv venv
+venv\Scripts\activate
+```
 
-*   ### Create and Activate a Virtual Environment
-    ```bash
-    # Install virtualenv package if you don't have it
-    pip install virtualenv
+**Mac/Linux:**
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
 
-    # Create the virtual env
-    virtualenv venv
+### 3. Install Dependencies
+```bash
+pip install -r requirements.txt
+```
 
-    # Activate the virtual env
-    # On macOS/Linux:
-    source venv/bin/activate
-    # On Windows:
-    .\venv\Scripts\activate
-    ```
+### 4. Database Setup
+Start your local MongoDB service, then run the setup script to create the database and collection schema:
+```bash
+python db_setup.py
+```
+*This will create the `git_events` database and applies necessary schema validation.*
 
-*   ### Install Requirements
-    First, ensure you have a `requirements.txt` file. If not, create one with the following content:
-    ```
-    Flask
-    pymongo
-    flask-cors
-    ```
-    Then, install the packages:
-    ```bash
-    pip install -r requirements.txt
-    ```
+## 🏃‍♂️ Running the Application
 
-*   ### Initialize the Database
-    This one-time script will create the `git_dashboard` database and the `events` collection with the required schema validation rules.
-    ```bash
-    python db_setup.py
-    ```
-    You should see a success message. You can verify the collection was created using **MongoDB Compass**.
+### Step 1: Start the Flask Server
+```bash
+python app.py
+```
+The application will start running at `http://localhost:5000`.
 
-***
+### Step 2: Expose via Ngrok
+In a separate terminal window, start Ngrok to tunnel traffic to your localhost:
+```bash
+ngrok http 5000
+```
+**Copy the HTTPS URL** provided by Ngrok (e.g., `https://random-id.ngrok-free.app`). You will need this to configure the GitHub Webhook.
 
-## 3. Configuration (Ngrok & GitHub)
+### Step 3: Access the Dashboard
+Open your browser and navigate to `http://localhost:5000`.
+*   The UI polls the database every 15 seconds.
+*   New events triggered in the Action Repo will appear here automatically.
 
-For GitHub to send events to your local machine, you need to create a secure tunnel using Ngrok.
+## 📡 API Endpoints
 
-*   ### Start Ngrok
-    In a **new terminal window**, run the following command to expose your local port 5000.
-    ```bash
-    ngrok http 5000
-    ```
-    Ngrok will display a public URL (e.g., `https://random-string.ngrok-free.app`). **Copy the HTTPS URL.**
+*   `POST /webhook/receiver`: Endpoint for GitHub to send event payloads.
+*   `GET /events`: Internal API used by the UI to fetch the latest stored events.
+*   `GET /`: Renders the main dashboard.
 
-*   ### Configure the GitHub Webhook
-    1.  Go to your GitHub repository and navigate to **Settings** > **Webhooks**.
-    2.  Click **Add webhook**.
-    3.  **Payload URL**: Paste your HTTPS Ngrok URL and append the endpoint path: `/webhook/receiver`.
-        *   Example: `https://your-ngrok-url.ngrok-free.app/webhook/receiver`
-    4.  **Content type**: Set this to **`application/json`**. This is critical.
-    5.  **Which events would you like to trigger this webhook?**: Select **"Let me select individual events"**.
-        *   Check **Pushes**.
-        *   Check **Pull requests**.
-    6.  Click **Add webhook**.
-
-***
-
-## 4. Running the Application
-
-Make sure you have three processes running:
-1.  The MongoDB service (usually in the background).
-2.  The Ngrok tunnel (in its own terminal).
-3.  The Flask application.
-
-*   ### Run the Flask App
-    In the terminal with your virtual environment activated, run:
-    ```bash
-    python run.py
-    ```
-
-*   ### View the Dashboard
-    Open your web browser and go to:
-    ```
-    http://127.0.0.1:5000/
-    ```
-
-The dashboard will load, and as you push, create pull requests, or merge branches in your configured GitHub repository, new entries will appear automatically.
-
-## Endpoints
-
-*   `GET http://127.0.0.1:5000/`
-    *   The main dashboard UI for viewing events.
-
-*   `POST http://127.0.0.1:5000/webhook/receiver`
-    *   The webhook receiver endpoint that GitHub sends data to.
-
-*   `GET http://127.0.0.1:5000/api/events`
-    *   The internal API that the frontend uses to fetch the latest event data from the database.
+## 🧪 Testing
+To test this, you must configure a webhook on a separate GitHub repository (see the `action-repo` README for details).
+```
