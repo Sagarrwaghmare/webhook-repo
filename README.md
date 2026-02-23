@@ -56,7 +56,7 @@ python db_setup.py
 
 ### Step 1: Start the Flask Server
 ```bash
-python app.py
+python run.py
 ```
 The application will start running at `http://localhost:5000`.
 
