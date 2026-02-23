@@ -40,7 +40,7 @@
 <script>
     async function fetchData() {
         try {
-            // We call the internal API route we are about to create
+             
             const response = await fetch('/api/events');
             const data = await response.json();
             const tableBody = document.querySelector('#eventTable tbody');
@@ -63,7 +63,7 @@
         }
     }
 
-    fetchData(); // Run on load
+    fetchData(); 
     setInterval(fetchData, 15000); // Run every 15s
 </script>
 
