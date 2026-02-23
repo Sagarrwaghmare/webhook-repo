@@ -60,12 +60,12 @@ python app.py
 ```
 The application will start running at `http://localhost:5000`.
 
-### Step 2: Expose via Ngrok
+### Step 2: Expose via Ngrok 
 In a separate terminal window, start Ngrok to tunnel traffic to your localhost:
 ```bash
 ngrok http 5000
 ```
-**Copy the HTTPS URL** provided by Ngrok (e.g., `https://random-id.ngrok-free.app`). You will need this to configure the GitHub Webhook.
+**Copy the HTTPS URL** provided by Ngrok (e.g., `https://random-id.ngrok-free.app`). You will need this to configure the GitHub Webhook. Also make sure you have authenticated in ngrok before running the above command.
 
 ### Step 3: Access the Dashboard
 Open your browser and navigate to `http://localhost:5000`.
